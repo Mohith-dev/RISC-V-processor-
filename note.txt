@@ -1,0 +1,69 @@
+before you going to think what should be datapath and what hardware elements need to be in that datapth , you need to first decide which instructions need to be excited , hardware exsists only exsists because some instruction forces it to exsist
+--------------------------------------------------------------------------------------------
+
+Instructions do not define hardware
+Required operations define hardware 
+
+Instruction format is a reflection of the datapath
+
+there are a total of 40 instructions in this integer base instruction set
+
+--------------------------------------------------------------------------------------------------
+
+insturction set and instruction set architecture are two differnt things , the instruction set  is just a list of all instructions
+and they are grouped by their functionality 
+
+ISA -> defines the complete specification of the instructions, registers ,memory,and the execution rules 
+
+it jsut defines teh rules boths sides to follow
+
+
+--------------------------------------------------------------------------------------------
+
+first we need a memory unit to store the instructions of a program and supply instructions given address -> Instruction memory
+now we need a register that holds the address of the current instruction -> Program counter
+we need a register file as the arithmetic or logical insturctions neeed them -> register file 
+register file-> a state elemetn that consists of a set of registers that can be read and written by supplying a register number to be accessed
+
+
+----------------------------------------------------------------------------------------------
+
+RISC-V groups instructions based on what hardware unit they activate 
+
+1.Arithmetic/Logical instruction
+2.Immediate instructions
+3.Load instructions
+4.Store instructions
+5.Branch instructions
+6.Jump instructions
+7.Upper immediate instructions
+
+
+
+and now we have different formats on how these instructions are encoded 
+
+R,I,S,B,U,J 
+------------------------------------------------------------------------------------------------------------------
+
+the data path elements needed for the R-type instructions are teh register file and the alu 
+the data path elements needed for the load and store insturctions which are basically S-type are the data memory unit and the immediate generation unit
+
+-> hte immediate generation unit is used to sign extend the 12 bit offset and add it to make it a 64 bit 
+-> to share a datapath element between two different instruction classes, we may need to allow multiple connections to the input of an element 
+
+the difference that comes from following RV32 or RV64 , is that register and data path widht changes 
+but the instruction size will always be 32 bits 
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+instruction alignment means instructions are allowed to start only at certain memory address 
+becuase it tells the cpu where a instruction begins and where it ends 
+
+so we intentionally keep the offset to represetn half word jumps so that we can save one bit , and to get teh exact jump in bytes we left shift by 1
+
+Instruction size = 2 OR 4 bytes
+Alignment = 2 bytes
+
+if instruction size = 4 bytes 
+alignment = 4 bytes
