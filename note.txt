@@ -67,3 +67,18 @@ Alignment = 2 bytes
 
 if instruction size = 4 bytes 
 alignment = 4 bytes
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+intialisation of memories is an excpetions which is accetpable when you are tyring ot syntehsise for FPGA , but in ASIC, you have ROM , which contians the boot code, and the boot code will load the program onto hte sram
+
+-------------------------------------------------------------------------------------------------------------------
+
+the reason we have to left shift the offset in branch type instructions is because , we have dropped one bit intentionally because it is always zero and dropping it increases teh branch range , becuase we can now store half word jumps instead of byte jumps 
+
+---------------------------------------------------------------------------------------------------------------------
+
+the underscore is only for readibility in 6'b10_0_000 is same as 6'b100000
+
+-----------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,113 @@
+pipelining is a implementation techinque in which multiple instructions are overlapped in execution
+
+Under ideal conditions and with a large number of instructions,
+the speed-up from pipelining is approximately equal to the number
+of pipe stages; a five-stage pipeline is nearly five times faster
+
+pipelining improves performance by increasing instruction throughput,in contrast to decreasing the execution time of an individual instruction 
+
+all the pipeline stages take a single clock cycle , so the clock cycle must be long enough to accomodate the slowest operation , becuase some stages are fast and some are slow , 
+
+just like in a single cycle based cpu , we have to make our clock cycle equal to worst case time for execution of instruction 
+
+
+if we keep increase the no of stages, then each stage becomes too small and due to register overhead , no speed gain 
+
+we go for  5 stage , because these are naturally independent 
+
+------------------------------------------------------------------------------------------------------------------------
+
+we need to stall even with forwarding when an R format instruction following load tries to use the data
+
+
+-------------------------------------------------------------------------------------------------------------------------
+
+microachitecture is all about how you are going to design the internals of a processor or system ,questions like how does my datapath looklike , how does my control path looklike 
+
+“Show me your block diagram and explain how it works clock by clock.”
+
+the idea of pipeline is that we want to execute one isntruction for every one clock cycle , and sometiems it does not happen, due to some situation call them hazards 
+
+
+hazards are situations when the next instruction cannot execute in the following clock cycle 
+1.Structural hazards
+    it means that the hardware cannot support the combination of instructions that we want to execute in the same clock cycle 
+
+say we had single memory for instruction and data, then we have a problem one instruciotn is trying to fetch , but other might 
+
+
+2.data hazard
+Also called a pipeline data hazard. When a planned instruction
+cannot execute in the proper clock cycle because data that are
+needed to execute the instruction are not yet available.
+
+add x19, x0, x1
+sub x2, x19, x3
+
+forwarding  or bypassing is the solution 
+
+sometimes even forwarding fails to solve some data hazards ,becuase sometimes the  dependence goes backward in time ,look at the figure 
+
+hence we need to stall the pipeline , which is going to be decided by the hazard detection unit 
+
+
+
+3.Control hazard 
+
+This type of hazard arises from the need to make a decison based on the result of one instruction while others are executing 
+
+
+Computers use prediction to handle conditonal branches . One simple approach is to predict always that conditional branches will be untaken 
+
+-> When you are right , the pipeline proceeds at full speed . Only when the conditional branches are taken does teh pipeline stall 
+
+A more sophisticated version of branch prediction would have some conditional branches predicted as taken and some as untaken 
+
+we also have dynamic branch predictors 
+
+##################important##########################################
+the instruction memory is
+used during only one of the five stages of an instruction, allowing it
+to be shared by following instructions during the other four stages.
+To retain the value of an individual instruction for its other four
+stages, the value read from instruction memory must be saved in a
+register. Similar arguments apply to every pipeline stage, so we
+must place registers wherever there are dividing lines between
+stages in Figure 4.31. 
+
+-------------------------------------------------------------------------------------------------------
+
+a five stage pipeline means the instruction is going to be executed in five stages and in a singe clock cycle five instructions are in execution 
+
+datapath - is the hardware that actually moves and transforms data 
+
+we usually have registers , alu, pc ,buses , mux and many more 
+
+controlpath  - tells the datapath waht work to do and when 
+
+its decodes the instruction and generate control signals 
+
+the five stages of execution are :
+
+1. IF - instruction fetch
+2. ID - instruction decdode adn register file read 
+3. EX - execution or address calculation 
+4. MEM - data memory access
+5. WB - Write back 
+
+
+Think of a pipeline like an assembly line. Each stage works on a different instruction at the same time. But that only works if every stage has its own stable input. Pipeline registers provide that stability.
+
+IF → ID → EX → MEM → WB
+Each stage finishes in one clock cycle. At the end of that cycle, its output must be frozen so the next stage can use it in the next cycle. That “freezing” is done by the pipeline register.
+
+if there we no were pipeline registers  then everythign we would one done in single clock cycle, because it would be one long combinational path 
+
+Pipeline registers exist only to separate two stages. The last stage has nowhere to go next. After WB, the instruction is finished. The architectural state (the register file) has already been updated. There is nothing left to buffer.
+
+WB writes into the register file.
+The register file itself is a clocked storage element. That already is a register boundary.
+
+
+
+pipelining does not reduce latency of the instruction , just increases teh instruction throughput
