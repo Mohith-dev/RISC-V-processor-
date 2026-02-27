@@ -111,3 +111,87 @@ The register file itself is a clocked storage element. That already is a registe
 
 
 pipelining does not reduce latency of the instruction , just increases teh instruction throughput
+
+------------------------------------------------------------------------------------------------------------------
+
+we are going to pass any kind of data to the next stage , that we might think can be needed in the execution of the instruction 
+
+we need clock with higher frequency, so we cant opt less stages, and the reason we opted for 5 stages, it was the perfect in terms of complexity and speed 
+
+if we opt for more stages , we would have register overhead 
+
+-----------------------------------------------------------------------------------------------------------------
+
+######## Solving the issue of hazards ##############################################
+
+
+what forwarding actually fixes is :
+Instruction i produces a value
+Instruction j needs it before WB
+
+
+condition 1a :
+
+EX/MEM.RegisterRd = ID/EX.RegisterRs1 
+
+what it means is that "the instruction ahead which is in mem stage will write to the register file and the insturction in the execte stage want to read teh same register as operand 1 
+
+
+Dependency is not always with the immediately previous instruction.
+Sometimes there is a gap.
+
+sub x2, x1, x3
+or  x8, x4, x5
+and x12, x2, x6
+
+in here the sub instruciton is in the wb stage, and the "and" instruciton is in exe stage , so you should forward the contents of MEM/WB to alu inputs 
+
+
+
+you only forward those instructions which writes a register 
+
+for example 
+
+sw x5 ,0(x2) , does not write any register yet it still internally carries the rd register , so dont go thinking like if dependency exsists -> forward 
+
+
+#1 check Regwrite 
+forwarding unit must check "is this instruction actually writing a register ?"
+
+#2 Never forward if Rd= x0
+
+addi x0, x1, 2
+
+result  = x1+ 2 , if any later instruction tries to use the x0 , we should not forward the result as becuase then we would be forwarding a non zero value , when teh instruction expects zero 
+
+
+----------------------------------------------------------------------------------------------------
+
+###########important######################
+
+When does a stage start ? 
+-> an instruction enters a stage immediately after a clock edge 
+
+When does a stage end ?
+-> The stage ends just before the next clock edge , becuase at next edge results are captured into the next pipeline register 
+
+
+the delay in determining the proper instruction to fetch is called a  control hazard or branch hazard 
+
+ An instruction must be fetched at every clock cycle to sustain the
+pipeline, yet in our design the decision about whether to branch
+doesn’t occur until the MEM pipeline stage
+
+flush -> to discard instructions in a pipeline , usually due to unexpected event 
+
+you simply force pipeline registers to zero 
+
+
+
+
+#############Flushing ##############################
+
+
+Say an instruction is in the ID stage it means teh decoding logic is already working on it , so the stage has the values and its working on it , and the decoded result will be written into ID/EX at the next clock edge 
+
+so the instruction becomes only real for execution only if it enters ID/EX , so kill the contents of this registers 
