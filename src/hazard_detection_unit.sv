@@ -1,4 +1,5 @@
 
+// this hazard detection unit operates during the ID stage so that it can insert the stall between the load and the instruction dependent on it 
 // we need to stall the pipeline when we have a load insturction followed by arithmetic insturction trying to read the same register 
 
 //we are going to check this data hazard by checking the destination and source registers at if_id and id_ex pipeline registers 
